@@ -1,0 +1,31 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "CUDA: Build active file",
+            "type": "process",
+            "command": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+            "args": [
+                "-NoProfile",
+                "-ExecutionPolicy",
+                "Bypass",
+                "-File",
+                "${workspaceFolder}\\build.ps1",
+                "${file}"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "CUDA: Run active file",
+            "type": "process",
+            "command": "${workspaceFolder}\\build\\${fileBasenameNoExtension}.exe",
+            "dependsOn": "CUDA: Build active file",
+            "dependsOrder": "sequence",
+            "problemMatcher": []
+        }
+    ]
+}
