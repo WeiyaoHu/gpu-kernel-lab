@@ -1,31 +1,41 @@
 {
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "CUDA: Build active file",
-            "type": "process",
-            "command": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
-            "args": [
-                "-NoProfile",
-                "-ExecutionPolicy",
-                "Bypass",
-                "-File",
-                "${workspaceFolder}\\build.ps1",
-                "${file}"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "problemMatcher": "$msCompile"
-        },
-        {
-            "label": "CUDA: Run active file",
-            "type": "process",
-            "command": "${workspaceFolder}\\build\\${fileBasenameNoExtension}.exe",
-            "dependsOn": "CUDA: Build active file",
-            "dependsOrder": "sequence",
-            "problemMatcher": []
-        }
-    ]
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "CUDA: Build current file",
+      "type": "process",
+      "command": "cmd.exe",
+      "args": [
+        "/d",
+        "/c",
+        "${workspaceFolder}\\.vscode\\cuda_task.cmd",
+        "build",
+        "${fileBasename}"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": ["$msCompile"]
+    },
+    {
+      "label": "CUDA: Build and run current file",
+      "type": "process",
+      "command": "cmd.exe",
+      "args": [
+        "/d",
+        "/c",
+        "${workspaceFolder}\\.vscode\\cuda_task.cmd",
+        "run",
+        "${fileBasename}"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": ["$msCompile"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    }
+  ]
 }

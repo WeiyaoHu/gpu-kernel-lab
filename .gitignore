@@ -1,5 +1,40 @@
-build/
-*.exe
-*.exp
-*.lib
+# Build outputs
+*.o
 *.obj
+*.out
+*.exe
+*.a
+*.so
+*.dll
+
+# Local executables without extensions
+add_one
+vector_add
+saxpy
+relu
+softmax
+layernorm
+histogram
+stride_benchmark
+
+# NVIDIA profiling outputs
+*.qdrep
+*.nsys-rep
+*.ncu-rep
+*.sqlite
+
+# Build directories
+build/
+cmake-build-*/
+
+# Local CUDA toolchain used by VS Code tasks
+.cuda-env/
+.conda-pkgs/
+
+# Editor / OS files
+.vscode/*
+!.vscode/tasks.json
+!.vscode/cuda_task.cmd
+.idea/
+.DS_Store
+Thumbs.db
