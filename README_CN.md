@@ -274,7 +274,7 @@ Profiling 时需要关注访问覆盖了多少个对齐的 Memory Segment 与 Me
 
 > 在有效数据量相同的情况下，一个 Warp 访问覆盖的 Memory Segment 越少、越紧凑、越对齐，通常效率越高。
 
-仓库中的 `stride_benchmark.cu` 用于测试：
+仓库中的 `15_stride_benchmark.cu` 用于测试：
 
 ```text
 stride = 1 / 2 / 4 / 8 / 16 / 32
@@ -976,9 +976,9 @@ SUM Reduction + Variance Reduction + Elementwise
 | `12_softmax_rows.cu` | 按行 Softmax |
 | `13_histogram_shared.cu` | Histogram + Atomic + Shared Memory Privatization |
 | `14_layernorm_rows.cu` | 按行 LayerNorm |
-| `stride_benchmark.cu` | 不同 stride 下的 Global Memory 访问性能实验 |
+| `15_stride_benchmark.cu` | 不同 stride 下的 Global Memory 访问性能实验 |
 
-> 说明：`07_transpose_naive.cu`～`11_reduction_warp_shuffle.cu` 主要用于展示和对比 Kernel 实现，本身没有 `main()`，不能直接编译为可执行程序；`00_add_one_minimal.cu`～`06_reduction_shared_memory.cu`、`12_softmax_rows.cu`～`14_layernorm_rows.cu` 和 `stride_benchmark.cu` 可以独立编译运行。
+> 说明：`07_transpose_naive.cu`～`11_reduction_warp_shuffle.cu` 主要用于展示和对比 Kernel 实现，本身没有 `main()`，不能直接编译为可执行程序；`00_add_one_minimal.cu`～`06_reduction_shared_memory.cu` 和 `12_softmax_rows.cu`～`15_stride_benchmark.cu` 可以独立编译运行。
 
 ---
 
@@ -1006,7 +1006,7 @@ nvcc -Xcompiler=/utf-8 02_vector_add.cu -O3 -o vector_add.exe
 
 仓库已经提供 VS Code 构建任务。打开一个可独立运行的 `.cu` 文件后，按 `Ctrl+Shift+B` 即可编译并运行当前文件；也可以从 **Terminal → Run Task** 选择仅编译或编译并运行。任务会优先使用项目内的 `.cuda-env`，否则使用系统 `PATH` 中的 `nvcc`，并处理非 ASCII 工作区路径的兼容问题。
 
-这些任务适用于包含 `main()` 的示例，即 `00_add_one_minimal.cu`～`06_reduction_shared_memory.cu`、`12_softmax_rows.cu`～`14_layernorm_rows.cu` 和 `stride_benchmark.cu`。`07_transpose_naive.cu`～`11_reduction_warp_shuffle.cu` 是用于对比实现的 Kernel 片段，不能单独运行。
+这些任务适用于包含 `main()` 的示例，即 `00_add_one_minimal.cu`～`06_reduction_shared_memory.cu` 和 `12_softmax_rows.cu`～`15_stride_benchmark.cu`。`07_transpose_naive.cu`～`11_reduction_warp_shuffle.cu` 是用于对比实现的 Kernel 片段，不能单独运行。
 
 查看编译器生成的 Register 与 Shared Memory 使用信息：
 

@@ -216,7 +216,7 @@ I learned to think in terms of memory segments/transactions:
 
 > For the same amount of useful data, covering fewer aligned memory segments is generally more efficient.
 
-The dedicated `stride_benchmark.cu` experiment compares access patterns with different strides and reports effective bandwidth.
+The dedicated `15_stride_benchmark.cu` experiment compares access patterns with different strides and reports effective bandwidth.
 
 ---
 
@@ -615,7 +615,7 @@ Potential future optimizations include:
 | `12_softmax_rows.cu` | Row-wise Softmax | Stable max/sum reductions and normalization |
 | `13_histogram_shared.cu` | Histogram | Atomics, race conditions, shared-memory privatization |
 | `14_layernorm_rows.cu` | Row-wise LayerNorm | Mean/variance reduction + affine normalization |
-| `stride_benchmark.cu` | Coalescing Experiment | Compare stride 1/2/4/8/16/32 effective bandwidth |
+| `15_stride_benchmark.cu` | Coalescing Experiment | Compare stride 1/2/4/8/16/32 effective bandwidth |
 
 ---
 
@@ -643,7 +643,7 @@ If the project path contains non-ASCII characters and `nvcc` reports an internal
 
 The repository also includes VS Code build tasks. Open a standalone `.cu` file and press `Ctrl+Shift+B` to build and run the current file, or use **Terminal → Run Task** to choose between build-only and build-and-run. The task prefers a project-local `.cuda-env`, falls back to `nvcc` from the system `PATH`, and works around compatibility issues with non-ASCII workspace paths.
 
-The standalone examples are `00_add_one_minimal.cu` through `06_reduction_shared_memory.cu`, `12_softmax_rows.cu` through `14_layernorm_rows.cu`, and `stride_benchmark.cu`. Files `07_transpose_naive.cu` through `11_reduction_warp_shuffle.cu` are kernel-focused comparison snippets without `main()` and cannot be run independently.
+The standalone examples are `00_add_one_minimal.cu` through `06_reduction_shared_memory.cu` and `12_softmax_rows.cu` through `15_stride_benchmark.cu`. Files `07_transpose_naive.cu` through `11_reduction_warp_shuffle.cu` are kernel-focused comparison snippets without `main()` and cannot be run independently.
 
 For optimization/profiling builds, useful commands include:
 
