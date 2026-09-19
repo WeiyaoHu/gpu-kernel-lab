@@ -344,9 +344,9 @@ Coalesced Global Store
 
 对应文件：
 
-- `ex7.cu`：Naive Transpose
-- `ex8.cu`：Shared Memory Tiled Transpose
-- `ex9.cu`：加入 Padding、避免严重 Bank Conflict 的转置
+- `07_transpose_naive.cu`：Naive Transpose
+- `08_transpose_tiled.cu`：Shared Memory Tiled Transpose
+- `09_transpose_padded.cu`：加入 Padding、避免严重 Bank Conflict 的转置
 
 ---
 
@@ -564,8 +564,8 @@ x[i] += 1.0f;
 
 对应：
 
-- `ex0.cu`
-- `ex1.cu`
+- `00_add_one_minimal.cu`
+- `01_add_one_benchmark.cu`
 
 ---
 
@@ -585,7 +585,7 @@ C[i] = A[i] + B[i];
 
 对应：
 
-- `ex2.cu`
+- `02_vector_add.cu`
 
 ---
 
@@ -605,7 +605,7 @@ Y[i] = a * X[i] + Y[i];
 
 对应：
 
-- `ex3.cu`
+- `03_saxpy.cu`
 
 ---
 
@@ -624,7 +624,7 @@ Y[i] = max(0, X[i]);
 
 对应：
 
-- `ex4.cu`
+- `04_relu.cu`
 
 ---
 
@@ -645,7 +645,7 @@ Y[i] = ReLU(a * X[i] + b);
 
 对应：
 
-- `ex5.cu`
+- `05_fused_elementwise.cu`
 
 ---
 
@@ -736,9 +736,9 @@ for (int offset = warpSize / 2;
 
 对应：
 
-- `ex6.cu`：基础 Reduction
-- `ex10.cu`：每个 Thread 处理两个元素
-- `ex11.cu`：Warp Shuffle Reduction
+- `06_reduction_shared_memory.cu`：基础 Reduction
+- `10_reduction_two_elements.cu`：每个 Thread 处理两个元素
+- `11_reduction_warp_shuffle.cu`：Warp Shuffle Reduction
 
 ---
 
@@ -808,7 +808,7 @@ Warp / Block SUM Reduction
 
 对应：
 
-- `ex12.cu`
+- `12_softmax_rows.cu`
 
 ---
 
@@ -862,7 +862,7 @@ atomicAdd(&hist[bin], 1);
 
 对应：
 
-- `ex13.cu`
+- `13_histogram_shared.cu`
 
 ---
 
@@ -923,7 +923,7 @@ SUM Reduction + Variance Reduction + Elementwise
 
 对应：
 
-- `ex14.cu`
+- `14_layernorm_rows.cu`
 
 ---
 
@@ -961,24 +961,24 @@ SUM Reduction + Variance Reduction + Elementwise
 
 | 文件 | 内容 |
 |---|---|
-| `ex0.cu` | 最基础的 `add_one` Kernel |
-| `ex1.cu` | `add_one` + CUDA Event Benchmark |
-| `ex2.cu` | 向量加法 |
-| `ex3.cu` | SAXPY |
-| `ex4.cu` | ReLU |
-| `ex5.cu` | 融合 Elementwise Kernel |
-| `ex6.cu` | 基础 Shared Memory Reduction |
-| `ex7.cu` | Naive Transpose |
-| `ex8.cu` | Shared Memory 分块矩阵转置 |
-| `ex9.cu` | 使用 Padding 减少 Bank Conflict 的矩阵转置 |
-| `ex10.cu` | 每个 Thread 处理两个元素的 Reduction |
-| `ex11.cu` | Warp Shuffle Reduction |
-| `ex12.cu` | 按行 Softmax |
-| `ex13.cu` | Histogram + Atomic + Shared Memory Privatization |
-| `ex14.cu` | 按行 LayerNorm |
+| `00_add_one_minimal.cu` | 最基础的 `add_one` Kernel |
+| `01_add_one_benchmark.cu` | `add_one` + CUDA Event Benchmark |
+| `02_vector_add.cu` | 向量加法 |
+| `03_saxpy.cu` | SAXPY |
+| `04_relu.cu` | ReLU |
+| `05_fused_elementwise.cu` | 融合 Elementwise Kernel |
+| `06_reduction_shared_memory.cu` | 基础 Shared Memory Reduction |
+| `07_transpose_naive.cu` | Naive Transpose |
+| `08_transpose_tiled.cu` | Shared Memory 分块矩阵转置 |
+| `09_transpose_padded.cu` | 使用 Padding 减少 Bank Conflict 的矩阵转置 |
+| `10_reduction_two_elements.cu` | 每个 Thread 处理两个元素的 Reduction |
+| `11_reduction_warp_shuffle.cu` | Warp Shuffle Reduction |
+| `12_softmax_rows.cu` | 按行 Softmax |
+| `13_histogram_shared.cu` | Histogram + Atomic + Shared Memory Privatization |
+| `14_layernorm_rows.cu` | 按行 LayerNorm |
 | `stride_benchmark.cu` | 不同 stride 下的 Global Memory 访问性能实验 |
 
-> 说明：`ex7.cu`～`ex11.cu` 主要用于展示和对比 Kernel 实现，本身没有 `main()`，不能直接编译为可执行程序；`ex0.cu`～`ex6.cu`、`ex12.cu`～`ex14.cu` 和 `stride_benchmark.cu` 可以独立编译运行。
+> 说明：`07_transpose_naive.cu`～`11_reduction_warp_shuffle.cu` 主要用于展示和对比 Kernel 实现，本身没有 `main()`，不能直接编译为可执行程序；`00_add_one_minimal.cu`～`06_reduction_shared_memory.cu`、`12_softmax_rows.cu`～`14_layernorm_rows.cu` 和 `stride_benchmark.cu` 可以独立编译运行。
 
 ---
 
@@ -989,8 +989,8 @@ SUM Reduction + Variance Reduction + Elementwise
 单个 CUDA 文件可以使用：
 
 ```bash
-nvcc ex2.cu -O3 -o ex2
-./ex2
+nvcc 02_vector_add.cu -O3 -o vector_add
+./vector_add
 ```
 
 ## Windows 与 VS Code
@@ -998,32 +998,32 @@ nvcc ex2.cu -O3 -o ex2
 部分源码包含中文注释。在 Windows 上手动编译时，建议让 MSVC 明确使用 UTF-8：
 
 ```powershell
-nvcc -Xcompiler=/utf-8 ex2.cu -O3 -o ex2.exe
-.\ex2.exe
+nvcc -Xcompiler=/utf-8 02_vector_add.cu -O3 -o vector_add.exe
+.\vector_add.exe
 ```
 
 如果项目路径包含中文等非 ASCII 字符，并且 `nvcc` 报告内部路径错误，请使用下面的 VS Code 任务，或将项目放到纯英文路径后再手动编译。
 
 仓库已经提供 VS Code 构建任务。打开一个可独立运行的 `.cu` 文件后，按 `Ctrl+Shift+B` 即可编译并运行当前文件；也可以从 **Terminal → Run Task** 选择仅编译或编译并运行。任务会优先使用项目内的 `.cuda-env`，否则使用系统 `PATH` 中的 `nvcc`，并处理非 ASCII 工作区路径的兼容问题。
 
-这些任务适用于包含 `main()` 的示例，即 `ex0.cu`～`ex6.cu`、`ex12.cu`～`ex14.cu` 和 `stride_benchmark.cu`。`ex7.cu`～`ex11.cu` 是用于对比实现的 Kernel 片段，不能单独运行。
+这些任务适用于包含 `main()` 的示例，即 `00_add_one_minimal.cu`～`06_reduction_shared_memory.cu`、`12_softmax_rows.cu`～`14_layernorm_rows.cu` 和 `stride_benchmark.cu`。`07_transpose_naive.cu`～`11_reduction_warp_shuffle.cu` 是用于对比实现的 Kernel 片段，不能单独运行。
 
 查看编译器生成的 Register 与 Shared Memory 使用信息：
 
 ```bash
-nvcc -Xptxas -v ex12.cu -O3 -o ex12
+nvcc -Xptxas -v 12_softmax_rows.cu -O3 -o softmax
 ```
 
 使用 Nsight Systems：
 
 ```bash
-nsys profile ./ex12
+nsys profile ./softmax
 ```
 
 使用 Nsight Compute：
 
 ```bash
-ncu ./ex12
+ncu ./softmax
 ```
 
 ---
