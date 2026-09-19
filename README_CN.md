@@ -274,7 +274,7 @@ Profiling 时需要关注访问覆盖了多少个对齐的 Memory Segment 与 Me
 
 > 在有效数据量相同的情况下，一个 Warp 访问覆盖的 Memory Segment 越少、越紧凑、越对齐，通常效率越高。
 
-仓库中的 `15_stride_benchmark.cu` 用于测试：
+仓库中的 `03_stride_benchmark.cu` 用于测试：
 
 ```text
 stride = 1 / 2 / 4 / 8 / 16 / 32
@@ -344,9 +344,9 @@ Coalesced Global Store
 
 对应文件：
 
-- `07_transpose_naive.cu`：Naive Transpose
-- `08_transpose_tiled.cu`：Shared Memory Tiled Transpose
-- `09_transpose_padded.cu`：加入 Padding、避免严重 Bank Conflict 的转置
+- `08_transpose_naive.cu`：Naive Transpose
+- `09_transpose_tiled.cu`：Shared Memory Tiled Transpose
+- `10_transpose_padded.cu`：加入 Padding、避免严重 Bank Conflict 的转置
 
 ---
 
@@ -605,7 +605,7 @@ Y[i] = a * X[i] + Y[i];
 
 对应：
 
-- `03_saxpy.cu`
+- `04_saxpy.cu`
 
 ---
 
@@ -624,7 +624,7 @@ Y[i] = max(0, X[i]);
 
 对应：
 
-- `04_relu.cu`
+- `05_relu.cu`
 
 ---
 
@@ -645,7 +645,7 @@ Y[i] = ReLU(a * X[i] + b);
 
 对应：
 
-- `05_fused_elementwise.cu`
+- `06_fused_elementwise.cu`
 
 ---
 
@@ -736,9 +736,9 @@ for (int offset = warpSize / 2;
 
 对应：
 
-- `06_reduction_shared_memory.cu`：基础 Reduction
-- `10_reduction_two_elements.cu`：每个 Thread 处理两个元素
-- `11_reduction_warp_shuffle.cu`：Warp Shuffle Reduction
+- `07_reduction_shared_memory.cu`：基础 Reduction
+- `11_reduction_two_elements.cu`：每个 Thread 处理两个元素
+- `12_reduction_warp_shuffle.cu`：Warp Shuffle Reduction
 
 ---
 
@@ -808,7 +808,7 @@ Warp / Block SUM Reduction
 
 对应：
 
-- `12_softmax_rows.cu`
+- `13_softmax_rows.cu`
 
 ---
 
@@ -862,7 +862,7 @@ atomicAdd(&hist[bin], 1);
 
 对应：
 
-- `13_histogram_shared.cu`
+- `14_histogram_shared.cu`
 
 ---
 
@@ -923,7 +923,7 @@ SUM Reduction + Variance Reduction + Elementwise
 
 对应：
 
-- `14_layernorm_rows.cu`
+- `15_layernorm_rows.cu`
 
 ---
 
@@ -964,21 +964,21 @@ SUM Reduction + Variance Reduction + Elementwise
 | `00_add_one_minimal.cu` | 最基础的 `add_one` Kernel |
 | `01_add_one_benchmark.cu` | `add_one` + CUDA Event Benchmark |
 | `02_vector_add.cu` | 向量加法 |
-| `03_saxpy.cu` | SAXPY |
-| `04_relu.cu` | ReLU |
-| `05_fused_elementwise.cu` | 融合 Elementwise Kernel |
-| `06_reduction_shared_memory.cu` | 基础 Shared Memory Reduction |
-| `07_transpose_naive.cu` | Naive Transpose |
-| `08_transpose_tiled.cu` | Shared Memory 分块矩阵转置 |
-| `09_transpose_padded.cu` | 使用 Padding 减少 Bank Conflict 的矩阵转置 |
-| `10_reduction_two_elements.cu` | 每个 Thread 处理两个元素的 Reduction |
-| `11_reduction_warp_shuffle.cu` | Warp Shuffle Reduction |
-| `12_softmax_rows.cu` | 按行 Softmax |
-| `13_histogram_shared.cu` | Histogram + Atomic + Shared Memory Privatization |
-| `14_layernorm_rows.cu` | 按行 LayerNorm |
-| `15_stride_benchmark.cu` | 不同 stride 下的 Global Memory 访问性能实验 |
+| `03_stride_benchmark.cu` | 不同 stride 下的 Global Memory 访问性能实验 |
+| `04_saxpy.cu` | SAXPY |
+| `05_relu.cu` | ReLU |
+| `06_fused_elementwise.cu` | 融合 Elementwise Kernel |
+| `07_reduction_shared_memory.cu` | 基础 Shared Memory Reduction |
+| `08_transpose_naive.cu` | Naive Transpose |
+| `09_transpose_tiled.cu` | Shared Memory 分块矩阵转置 |
+| `10_transpose_padded.cu` | 使用 Padding 减少 Bank Conflict 的矩阵转置 |
+| `11_reduction_two_elements.cu` | 每个 Thread 处理两个元素的 Reduction |
+| `12_reduction_warp_shuffle.cu` | Warp Shuffle Reduction |
+| `13_softmax_rows.cu` | 按行 Softmax |
+| `14_histogram_shared.cu` | Histogram + Atomic + Shared Memory Privatization |
+| `15_layernorm_rows.cu` | 按行 LayerNorm |
 
-> 说明：`07_transpose_naive.cu`～`11_reduction_warp_shuffle.cu` 主要用于展示和对比 Kernel 实现，本身没有 `main()`，不能直接编译为可执行程序；`00_add_one_minimal.cu`～`06_reduction_shared_memory.cu` 和 `12_softmax_rows.cu`～`15_stride_benchmark.cu` 可以独立编译运行。
+> 说明：`08_transpose_naive.cu`～`12_reduction_warp_shuffle.cu` 主要用于展示和对比 Kernel 实现，本身没有 `main()`，不能直接编译为可执行程序；`00_add_one_minimal.cu`～`07_reduction_shared_memory.cu` 和 `13_softmax_rows.cu`～`15_layernorm_rows.cu` 可以独立编译运行。
 
 ---
 
@@ -1006,12 +1006,12 @@ nvcc -Xcompiler=/utf-8 02_vector_add.cu -O3 -o vector_add.exe
 
 仓库已经提供 VS Code 构建任务。打开一个可独立运行的 `.cu` 文件后，按 `Ctrl+Shift+B` 即可编译并运行当前文件；也可以从 **Terminal → Run Task** 选择仅编译或编译并运行。任务会优先使用项目内的 `.cuda-env`，否则使用系统 `PATH` 中的 `nvcc`，并处理非 ASCII 工作区路径的兼容问题。
 
-这些任务适用于包含 `main()` 的示例，即 `00_add_one_minimal.cu`～`06_reduction_shared_memory.cu` 和 `12_softmax_rows.cu`～`15_stride_benchmark.cu`。`07_transpose_naive.cu`～`11_reduction_warp_shuffle.cu` 是用于对比实现的 Kernel 片段，不能单独运行。
+这些任务适用于包含 `main()` 的示例，即 `00_add_one_minimal.cu`～`07_reduction_shared_memory.cu` 和 `13_softmax_rows.cu`～`15_layernorm_rows.cu`。`08_transpose_naive.cu`～`12_reduction_warp_shuffle.cu` 是用于对比实现的 Kernel 片段，不能单独运行。
 
 查看编译器生成的 Register 与 Shared Memory 使用信息：
 
 ```bash
-nvcc -Xptxas -v 12_softmax_rows.cu -O3 -o softmax
+nvcc -Xptxas -v 13_softmax_rows.cu -O3 -o softmax
 ```
 
 使用 Nsight Systems：

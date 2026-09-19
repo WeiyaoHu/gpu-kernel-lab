@@ -216,7 +216,7 @@ I learned to think in terms of memory segments/transactions:
 
 > For the same amount of useful data, covering fewer aligned memory segments is generally more efficient.
 
-The dedicated `15_stride_benchmark.cu` experiment compares access patterns with different strides and reports effective bandwidth.
+The dedicated `03_stride_benchmark.cu` experiment compares access patterns with different strides and reports effective bandwidth.
 
 ---
 
@@ -603,19 +603,19 @@ Potential future optimizations include:
 | `00_add_one_minimal.cu` | Minimal CUDA kernel | Basic host/device flow and `add_one` |
 | `01_add_one_benchmark.cu` | CUDA benchmark | Warm-up, CUDA Events, repeated timing, correctness |
 | `02_vector_add.cu` | Vector Add | Coalesced elementwise memory-bound kernel |
-| `03_saxpy.cu` | SAXPY | FLOPs, arithmetic intensity, FMA intuition |
-| `04_relu.cu` | ReLU | Elementwise activation and data-dependent control flow |
-| `05_fused_elementwise.cu` | Fused Elementwise | Kernel fusion and reduced intermediate memory traffic |
-| `06_reduction_shared_memory.cu` | Reduction v1 | Shared-memory tree reduction + synchronization |
-| `07_transpose_naive.cu` | Naive Transpose | Coalesced read but strided write |
-| `08_transpose_tiled.cu` | Tiled Transpose | Shared-memory tiling for coalesced read/write |
-| `09_transpose_padded.cu` | Conflict-Free Transpose | `32 x 33` padding to avoid bank conflicts |
-| `10_reduction_two_elements.cu` | Reduction v2 | Two elements per thread + register pre-reduction |
-| `11_reduction_warp_shuffle.cu` | Reduction v3 | Warp shuffle + reduced shared-memory traffic |
-| `12_softmax_rows.cu` | Row-wise Softmax | Stable max/sum reductions and normalization |
-| `13_histogram_shared.cu` | Histogram | Atomics, race conditions, shared-memory privatization |
-| `14_layernorm_rows.cu` | Row-wise LayerNorm | Mean/variance reduction + affine normalization |
-| `15_stride_benchmark.cu` | Coalescing Experiment | Compare stride 1/2/4/8/16/32 effective bandwidth |
+| `03_stride_benchmark.cu` | Coalescing Experiment | Compare stride 1/2/4/8/16/32 effective bandwidth |
+| `04_saxpy.cu` | SAXPY | FLOPs, arithmetic intensity, FMA intuition |
+| `05_relu.cu` | ReLU | Elementwise activation and data-dependent control flow |
+| `06_fused_elementwise.cu` | Fused Elementwise | Kernel fusion and reduced intermediate memory traffic |
+| `07_reduction_shared_memory.cu` | Reduction v1 | Shared-memory tree reduction + synchronization |
+| `08_transpose_naive.cu` | Naive Transpose | Coalesced read but strided write |
+| `09_transpose_tiled.cu` | Tiled Transpose | Shared-memory tiling for coalesced read/write |
+| `10_transpose_padded.cu` | Conflict-Free Transpose | `32 x 33` padding to avoid bank conflicts |
+| `11_reduction_two_elements.cu` | Reduction v2 | Two elements per thread + register pre-reduction |
+| `12_reduction_warp_shuffle.cu` | Reduction v3 | Warp shuffle + reduced shared-memory traffic |
+| `13_softmax_rows.cu` | Row-wise Softmax | Stable max/sum reductions and normalization |
+| `14_histogram_shared.cu` | Histogram | Atomics, race conditions, shared-memory privatization |
+| `15_layernorm_rows.cu` | Row-wise LayerNorm | Mean/variance reduction + affine normalization |
 
 ---
 
@@ -626,7 +626,7 @@ CUDA Toolkit with `nvcc` is required. On Windows, a working MSVC C++ toolchain i
 For a standalone executable example:
 
 ```bash
-nvcc 12_softmax_rows.cu -O3 -o softmax
+nvcc 13_softmax_rows.cu -O3 -o softmax
 ./softmax
 ```
 
@@ -635,7 +635,7 @@ nvcc 12_softmax_rows.cu -O3 -o softmax
 Some source files contain non-ASCII comments. When compiling manually on Windows, tell MSVC to read the source as UTF-8:
 
 ```powershell
-nvcc -Xcompiler=/utf-8 12_softmax_rows.cu -O3 -o softmax.exe
+nvcc -Xcompiler=/utf-8 13_softmax_rows.cu -O3 -o softmax.exe
 .\softmax.exe
 ```
 
@@ -643,7 +643,7 @@ If the project path contains non-ASCII characters and `nvcc` reports an internal
 
 The repository also includes VS Code build tasks. Open a standalone `.cu` file and press `Ctrl+Shift+B` to build and run the current file, or use **Terminal → Run Task** to choose between build-only and build-and-run. The task prefers a project-local `.cuda-env`, falls back to `nvcc` from the system `PATH`, and works around compatibility issues with non-ASCII workspace paths.
 
-The standalone examples are `00_add_one_minimal.cu` through `06_reduction_shared_memory.cu` and `12_softmax_rows.cu` through `15_stride_benchmark.cu`. Files `07_transpose_naive.cu` through `11_reduction_warp_shuffle.cu` are kernel-focused comparison snippets without `main()` and cannot be run independently.
+The standalone examples are `00_add_one_minimal.cu` through `07_reduction_shared_memory.cu` and `13_softmax_rows.cu` through `15_layernorm_rows.cu`. Files `08_transpose_naive.cu` through `12_reduction_warp_shuffle.cu` are kernel-focused comparison snippets without `main()` and cannot be run independently.
 
 For optimization/profiling builds, useful commands include:
 
