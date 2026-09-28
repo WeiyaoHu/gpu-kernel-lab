@@ -26,6 +26,9 @@ stride_benchmark
 # Build directories
 build/
 cmake-build-*/
+__pycache__/
+*.py[cod]
+.pytest_cache/
 
 # Local CUDA toolchain used by VS Code tasks
 .cuda-env/
